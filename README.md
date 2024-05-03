@@ -5,7 +5,7 @@ This is a Python program that scans WARC (web archive) files for viruses and NSF
   - It detects violence/nudity using an AI model,
   - It detects viruses using the Linux `clamd` antivirus daemon.
   
-You can either run it in test mode (check an individual WARC file) or in server mode (for easy integration into existing workflows).
+You can either run it in test mode (check an individual WARC file) or in server mode (for easy integration into existing workflows) when the server has access to the WARC files via file system.
 
 The program accepts both compressed and uncompressed WARC files.
 
