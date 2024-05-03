@@ -1,0 +1,5 @@
+Flask==3.0.0
+NSFWDetection==1.0.2
+prettytable==3.9.0
+warcio==1.7.4
+clamd==1.0.2
