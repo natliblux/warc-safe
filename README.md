@@ -1,6 +1,6 @@
 # Introduction
 
-This is a Python program that scans WARC (web archive) files for NSFW (not-safe-for-work) content:
+This is a Python program that scans WARC (web archive) files for viruses and NSFW (not-safe-for-work) content:
 
   - It detects violence/nudity using an AI model,
   - It detects viruses using the Linux `clamd` antivirus daemon.
