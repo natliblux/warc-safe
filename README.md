@@ -45,6 +45,8 @@ You can start the application in test mode from the command-line as follows:
     
 The first example above runs the antivirus scan and the second the NSFW classifier.
 
+![test mode](pic.png)
+
 ## Server mode
 
 You can start the application as a server like so:
