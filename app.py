@@ -15,7 +15,7 @@ sys.path.append('server')
 from server import app
 
 # The version of this app
-app_version = "0.97 (02.05.2024)"
+app_version = "1.0 (20.06.2024)"
 
 if __name__ == '__main__':
     
