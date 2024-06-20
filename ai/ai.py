@@ -39,7 +39,7 @@ def handleRecordNsfw(file, record, net):
     memento = tempfile.NamedTemporaryFile(delete=False)
     mementofname = os.path.join("/tmp/", memento.name)
 
-    allowed_types = 'JPEG, jpeg, JPG, jpg'
+    allowed_types = 'tif, tiff, TIF, TIFF, png, PNG, jpg, jpeg, JPG, JPEG, svg, SVG, webp, WEBP'
         
     # Prepare the metadata
     res = {}
