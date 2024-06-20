@@ -10,7 +10,7 @@ sys.path.append('antivirus')
 from antivirus import runAntivirus
 
 sys.path.append('util')
-from util import runEverything
+from util import runEverything, suppressStdout
 
 
 app = Flask(__name__)
@@ -28,9 +28,11 @@ def test_nsfw():
         if 'file_path' in data:
             # Prepare the params
             file_path = data['file_path']
+            results = {}
             
             # Now we run the workflow
-            results = runNsfwClassifier(file_path)
+            with suppressStdout():
+                results = runNsfwClassifier(file_path)
             
             # Return the JSON results
             return jsonify({'results': results})
@@ -53,9 +55,11 @@ def test_antivirus():
         if 'file_path' in data:
             # Prepare the params
             file_path = data['file_path']
+            results = {}
             
             # Now we run the workflow
-            results = runAntivirus(file_path)
+            with suppressStdout():
+                results = runAntivirus(file_path)
             
             # Return the JSON results
             return jsonify({'results': results})
@@ -79,9 +83,11 @@ def test_all():
         if 'file_path' in data:
             # Prepare the params
             file_path = data['file_path']
+            results = {}
             
             # Now we run the workflow
-            results = runEverything(file_path)
+            with suppressStdout():
+                results = runEverything(file_path)
             
             # Return the JSON results
             return jsonify({'results': results})
