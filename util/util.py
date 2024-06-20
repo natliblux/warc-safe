@@ -8,6 +8,7 @@ import sys
 import stat
 import re
 import clamd
+from contextlib import contextmanager
 
 # Initialize the NSFW model
 net = Model()
@@ -62,3 +63,13 @@ def runEverything(input_file):
                     
     return results
 
+
+@contextmanager
+def suppressStdout():
+    with open(os.devnull, 'w') as devnull:
+        old_stderr = sys.stderr
+        sys.stderr = devnull
+        try:
+            yield
+        finally:
+            sys.stderr = old_stderr
