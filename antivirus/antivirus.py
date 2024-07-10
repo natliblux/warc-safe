@@ -1,14 +1,8 @@
 from warcio.archiveiterator import ArchiveIterator
 import clamd
-from argparse import ArgumentParser
-from codecs import decode
-import json
 import os
 import tempfile
-import sys
 import stat
-import time
-import re
 from prettytable import PrettyTable
 
 # Initialize the antivirus client
@@ -25,7 +19,7 @@ class bcolors:
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
     
-def handleRecordAntivirus(input_file, record, clamd_client):
+def handleRecordAntivirus(record, clamd_client):
     tempfile.tempdir = "/tmp/"
     memento = tempfile.NamedTemporaryFile(delete=False)
     mementofname = os.path.join("/tmp/", memento.name)
@@ -60,7 +54,7 @@ def runAntivirus(input_file):
         for record in ArchiveIterator(stream):
             if record.rec_type == 'response' and record.http_headers:
                 # Run the antivirus and build the result entity
-                result = handleRecordAntivirus(input_file, record, clamd_client)
+                result = handleRecordAntivirus(record, clamd_client)
                 result['filename'] = os.path.basename(record.rec_headers.get_header('WARC-Target-URI'))
                 results[record.rec_headers.get_header('WARC-Record-ID')] = result
                     

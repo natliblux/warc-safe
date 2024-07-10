@@ -1,15 +1,10 @@
 from warcio.archiveiterator import ArchiveIterator
 from nsfw_detector.model import Model
-from argparse import ArgumentParser
-from codecs import decode
-import json
 import os
 import tempfile
-import sys
-import stat
-import time
 import re
 import subprocess
+import stat
 from prettytable import PrettyTable
     
 net = Model()
@@ -26,6 +21,7 @@ class bcolors:
     UNDERLINE = '\033[4m'
 
 re_file = re.compile(r'^([^\ ]+) image')
+allowed_types = 'tif, tiff, TIF, TIFF, png, PNG, jpg, jpeg, JPG, JPEG, svg, SVG, webp, WEBP'
 
 def isallowed(f):
     result = subprocess.run(['file', '-b', f],stdout=subprocess.PIPE)
@@ -33,13 +29,11 @@ def isallowed(f):
     if m:
         return m.group(1)
     
-def handleRecordNsfw(file, record, net):
+def handleRecordNsfw(record, net):
     tempfile.tempdir = "/tmp/"
     
     memento = tempfile.NamedTemporaryFile(delete=False)
     mementofname = os.path.join("/tmp/", memento.name)
-
-    allowed_types = 'tif, tiff, TIF, TIFF, png, PNG, jpg, jpeg, JPG, JPEG, svg, SVG, webp, WEBP'
         
     # Prepare the metadata
     res = {}
@@ -78,9 +72,9 @@ def runNsfwClassifier(input_file):
         for record in ArchiveIterator(stream):
             if record.rec_type == 'response' and record.http_headers:
                 mime = record.http_headers.get_header('Content-Type')
-                if mime and len(mime) > 6 and mime[0:6] == 'image/':
+                if mime and mime.startswith('image/'):
                     # Launch the classifier and build the result entity
-                    result = handleRecordNsfw(input_file, record, net)
+                    result = handleRecordNsfw(record, net)
                     result['filename'] = os.path.basename(record.rec_headers.get_header('WARC-Target-URI'))
                     results[record.rec_headers.get_header('WARC-Record-ID')] = result
                     

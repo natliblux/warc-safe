@@ -7,7 +7,7 @@ This is a Python program that scans WARC (web archive) files for viruses and NSF
   
 You can either run it in test mode (check an individual WARC file) or in server mode (for easy integration into existing workflows) when the server has access to the WARC files via file system.
 
-The program accepts both compressed and uncompressed WARC files.
+The program accepts both compressed and uncompressed WARC files and the AI NSFW model is able to work with TIFF, JPEG, PNG, SVG and WEBP formats (although images with exotic dimensions/formats might not fully work).
 
 
 # Installation

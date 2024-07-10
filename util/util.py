@@ -41,13 +41,13 @@ def runEverything(input_file):
                 # NSFW content detection
                 mime = record.http_headers.get_header('Content-Type')
                 if mime and len(mime) > 6 and mime[0:6] == 'image/':
-                    nsfw_result = handleRecordNsfw(input_file, record, net)
+                    nsfw_result = handleRecordNsfw(record, net)
                     if 'nsfw_res' in nsfw_result:
                         result['nsfw_res'] = nsfw_result['nsfw_res']
                         result['nsfw_score'] = nsfw_result['nsfw_score']
                     
                 # Virus detection
-                av_result = handleRecordAntivirus(input_file, record, clamd_client)
+                av_result = handleRecordAntivirus(record, clamd_client)
                 
                 # If there are no results, we assume that this element is OK
                 try:               
