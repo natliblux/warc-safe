@@ -5,8 +5,8 @@ import tempfile
 import stat
 from prettytable import PrettyTable
 
-# Initialize the antivirus client
-clamd_client = clamd.ClamdUnixSocket()
+# Path where to store the temporary records while scanning them
+tempfile.tempdir = "/tmp/"
     
 class bcolors:
     HEADER = '\033[95m'
@@ -19,17 +19,22 @@ class bcolors:
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
     
-def handleRecordAntivirus(record, clamd_client):
-    tempfile.tempdir = "/tmp/"
+def handleRecordAntivirus(record):
+    # Initialize the antivirus client
+    clamd_client = clamd.ClamdUnixSocket()
+    
+    # Set up the temp file
     memento = tempfile.NamedTemporaryFile(delete=False)
     mementofname = os.path.join("/tmp/", memento.name)
     res = {}
     res['mime'] = record.http_headers.get_header('Content-Type')
         
     try:
+        # Write the record to disk so that it can be scanned
         memento.write(record.content_stream().read())
         memento.close()
         
+        # Make sure it is readable by the AV
         os.chmod(mementofname, stat.S_IREAD | stat.S_IWRITE | stat.S_IROTH | stat.S_IWOTH)
         
         # The antivirus scan
@@ -54,7 +59,7 @@ def runAntivirus(input_file):
         for record in ArchiveIterator(stream):
             if record.rec_type == 'response' and record.http_headers:
                 # Run the antivirus and build the result entity
-                result = handleRecordAntivirus(record, clamd_client)
+                result = handleRecordAntivirus(record)
                 result['filename'] = os.path.basename(record.rec_headers.get_header('WARC-Target-URI'))
                 results[record.rec_headers.get_header('WARC-Record-ID')] = result
                     

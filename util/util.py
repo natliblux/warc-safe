@@ -12,10 +12,7 @@ from contextlib import contextmanager
 
 # Initialize the NSFW model
 net = Model()
-    
-# Initialize the antivirus client
-clamd_client = clamd.ClamdUnixSocket()
-    
+
 sys.path.append('ai')
 from ai import handleRecordNsfw
 
@@ -47,7 +44,7 @@ def runEverything(input_file):
                         result['nsfw_score'] = nsfw_result['nsfw_score']
                     
                 # Virus detection
-                av_result = handleRecordAntivirus(record, clamd_client)
+                av_result = handleRecordAntivirus(record)
                 
                 # If there are no results, we assume that this element is OK
                 try:               
