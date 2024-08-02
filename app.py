@@ -15,7 +15,7 @@ sys.path.append('server')
 from server import app
 
 # The version of this app
-app_version = "1.22 (31.07.2024)"
+app_version = "1.23 (02.08.2024)"
 
 if __name__ == '__main__':
     
@@ -32,7 +32,7 @@ if __name__ == '__main__':
     if args.server:
         server_port = args.server
         print(f"Starting the server on port {server_port}")
-        app.run(debug=True, port=server_port, threaded=True)
+        app.run(debug=False, port=server_port, threaded=True)
     elif args.test_nsfw:
         test_file = args.test_nsfw
         print(f"Starting NSFW test on file: {test_file}")
