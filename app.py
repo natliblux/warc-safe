@@ -1,6 +1,8 @@
 from flask import Flask, request, jsonify
 import argparse
 import sys
+import logging
+import werkzeug
 
 sys.path.append('ai')
 from ai import runNsfwClassifier, printClassifierResults
@@ -15,7 +17,7 @@ sys.path.append('server')
 from server import app
 
 # The version of this app
-app_version = "1.23 (02.08.2024)"
+app_version = "1.24 (14.08.2024)"
 
 if __name__ == '__main__':
     
@@ -25,6 +27,9 @@ if __name__ == '__main__':
     parser.add_argument("-tn", "--test-nsfw", type=str, help="Test a WARC file for NSFW content. The WARC can be compressed or uncompressed.")
     parser.add_argument("-ta", "--test-av", type=str, help="Test a WARC file for viruses. The WARC can be compressed or uncompressed.")
     parser.add_argument("-v", "--version", action='version', version=f"Version: {app_version}")
+
+    # Set up some logging
+    logging.getLogger('werkzeug').setLevel(logging.ERROR)
 
     args = parser.parse_args()
     results = {}
