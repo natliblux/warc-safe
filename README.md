@@ -106,3 +106,10 @@ From time to time it might make sense to update your `clamav` signature database
 You might also want to restart the service with
 
     systemctl restart clamav-freshclam
+
+# License
+
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+
+See `COPYING` to see full text.
+
