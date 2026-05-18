@@ -76,7 +76,7 @@ Here is an example request with `curl`:
 
 As with the command-line version above, you can scan a single WARC record by setting the `offset` parameter. An example is shown below.
 
-    curl -X POST -H "Content-Type: application/json" -d '{"file_path": "/my/path/my.warc.gz", offset=12345}' localhost:8123/test_all
+    curl -X POST -H "Content-Type: application/json" -d '{"file_path": "/my/path/my.warc.gz", "offset"=12345}' localhost:8123/test_all
 
 
 ## Return values
