@@ -31,6 +31,14 @@ def runEverything(input_file, offset=None):
         
         # Check if we need to seek to an offset inside the WARC
         if offset is not None:
+            if isinstance(offset, str):
+                try:
+                    offset = int(offset)
+                except ValueError:
+                    raise TypeError("offset must be either a positive integer, or a string representation of one")
+            elif not isinstance(offset, int):
+                raise TypeError("offset must be a positive integer")
+        
             if offset < 0:
                 raise ValueError("offset cannot be negative")
             
