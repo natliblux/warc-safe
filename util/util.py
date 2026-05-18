@@ -23,11 +23,19 @@ from antivirus import handleRecordAntivirus
 #   -- antivirus
 #   -- nsfw classifier
 #
-def runEverything(input_file):
+def runEverything(input_file, offset=None):
     results = {}
     tempfile.tempdir = "/tmp/"
     
     with open(input_file, 'rb') as stream:
+        
+        # Check if we need to seek to an offset inside the WARC
+        if offset is not None:
+            if offset < 0:
+                raise ValueError("offset cannot be negative")
+            
+            stream.seek(offset)
+            
         for record in ArchiveIterator(stream):
             if record.rec_type == 'response' and record.http_headers:
                 
@@ -57,6 +65,10 @@ def runEverything(input_file):
                 # Build the results
                 result['filename'] = os.path.basename(record.rec_headers.get_header('WARC-Target-URI'))
                 results[record.rec_headers.get_header('WARC-Record-ID')] = result
+            
+            # If we have offset set, we only check that single record
+            if offset is not None:
+                break
                     
     return results
 

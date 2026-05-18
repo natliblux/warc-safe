@@ -64,11 +64,18 @@ def handleRecordNsfw(record, net):
 
     return res
 
-
-def runNsfwClassifier(input_file):
+def runNsfwClassifier(input_file, offset=None):
     results = {}
     
     with open(input_file, 'rb') as stream:
+        
+        # Check if we need to seek to an offset inside the WARC
+        if offset is not None:
+            if offset < 0:
+                raise ValueError("offset cannot be negative")
+            
+            stream.seek(offset)
+    
         for record in ArchiveIterator(stream):
             if record.rec_type == 'response' and record.http_headers:
                 mime = record.http_headers.get_header('Content-Type')
@@ -77,6 +84,10 @@ def runNsfwClassifier(input_file):
                     result = handleRecordNsfw(record, net)
                     result['filename'] = os.path.basename(record.rec_headers.get_header('WARC-Target-URI'))
                     results[record.rec_headers.get_header('WARC-Record-ID')] = result
+                    
+            # If we have offset set, we only check that single record
+            if offset is not None:
+                break
                     
     return results
      

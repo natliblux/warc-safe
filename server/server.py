@@ -20,6 +20,8 @@ app = Flask(__name__)
 #
 #   - file_path: The absolute path to the WARC you want to analyze. 
 #                It can be compressed or uncompressed.
+#   - offset:    If present, the offset of the record to analyze. No other records
+#                will be analyzed.
 #
 @app.route('/test_nsfw', methods=['POST'])
 def test_nsfw():
@@ -32,7 +34,12 @@ def test_nsfw():
             
             # Now we run the workflow
             with suppressStdout():
-                results = runNsfwClassifier(file_path)
+                
+                # Take care of the offset
+                if 'offset' in data: 
+                    results = runNsfwClassifier(file_path, offset=data['offset'])
+                else:
+                    results = runNsfwClassifier(file_path)
             
             # Return the JSON results
             return jsonify({'results': results})
@@ -47,6 +54,8 @@ def test_nsfw():
 #
 #   - file_path: The absolute path to the WARC you want to analyze. 
 #                It can be compressed or uncompressed.
+#   - offset:    If present, the offset of the record to analyze. No other records
+#                will be analyzed.
 #
 @app.route('/test_antivirus', methods=['POST'])
 def test_antivirus():
@@ -59,7 +68,12 @@ def test_antivirus():
             
             # Now we run the workflow
             with suppressStdout():
-                results = runAntivirus(file_path)
+                
+                # Take care of the offset
+                if 'offset' in data: 
+                    results = runAntivirus(file_path, offset=data['offset'])
+                else:
+                    results = runAntivirus(file_path)
             
             # Return the JSON results
             return jsonify({'results': results})
@@ -75,6 +89,8 @@ def test_antivirus():
 #
 #   - file_path: The absolute path to the WARC you want to analyze. 
 #                It can be compressed or uncompressed.
+#   - offset:    If present, the offset of the record to analyze. No other records
+#                will be analyzed.
 #
 @app.route('/test_all', methods=['POST'])
 def test_all():
@@ -87,7 +103,12 @@ def test_all():
             
             # Now we run the workflow
             with suppressStdout():
-                results = runEverything(file_path)
+                
+                # Take care of the offset
+                if 'offset' in data:
+                    results = runEverything(file_path, offset=data['offset'])
+                else:
+                    results = runEverything(file_path)
             
             # Return the JSON results
             return jsonify({'results': results})

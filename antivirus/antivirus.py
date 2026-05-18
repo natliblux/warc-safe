@@ -52,16 +52,28 @@ def handleRecordAntivirus(record):
                     
     return res
 
-def runAntivirus(input_file):
+def runAntivirus(input_file, offset=None):
     results = {}
     
     with open(input_file, 'rb') as stream:
+        
+        # Check if we need to seek to an offset inside the WARC
+        if offset is not None:
+            if offset < 0:
+                raise ValueError("offset cannot be negative")
+            
+            stream.seek(offset)
+            
         for record in ArchiveIterator(stream):
             if record.rec_type == 'response' and record.http_headers:
                 # Run the antivirus and build the result entity
                 result = handleRecordAntivirus(record)
                 result['filename'] = os.path.basename(record.rec_headers.get_header('WARC-Target-URI'))
                 results[record.rec_headers.get_header('WARC-Record-ID')] = result
+                
+            # If we have offset set, we only check that single record
+            if offset is not None:
+                break
                     
     return results
 

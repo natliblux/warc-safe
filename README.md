@@ -42,10 +42,17 @@ You can start the application in test mode from the command-line as follows:
 
     python app.py --test-av </path/to/warc>
     python app.py --test-nsfw </path/to/warc>
-    
+
 The first example above runs the antivirus scan and the second the NSFW classifier.
 
 ![test mode](pic.png)
+
+### Scanning a single record
+
+If you want to scan a single record in a WARC file, starting at a specific offset, you can use the `--offset` parameter. An example is shown below.
+
+        python app.py --test-nsfw </path/to/warc> --offset 12345
+
 
 ## Server mode
 
@@ -64,6 +71,13 @@ All these endpoints are POST and take a single argument, `file_path`, which is t
 Here is an example request with `curl`:
 
     curl -X POST -H "Content-Type: application/json" -d '{"file_path": "/my/path/my.warc.gz"}' localhost:8123/test_all
+
+### Scanning a single record
+
+As with the command-line version above, you can scan a single WARC record by setting the `offset` parameter. An example is shown below.
+
+    curl -X POST -H "Content-Type: application/json" -d '{"file_path": "/my/path/my.warc.gz", offset=12345}' localhost:8123/test_all
+
 
 ## Return values
 
@@ -91,6 +105,14 @@ The fields available for each record are the following:
   - Antivirus: `av_details` and `av_res`,
   - NSFW: `nsfw_res` and `nsfw_score`,
   - Errors: `err`.
+
+Note that if there were any errors while processing a record, the JSON result will be of the form:
+
+````
+{
+    "error": "error message"
+}
+````
 
 ## NSFW scoring
 
