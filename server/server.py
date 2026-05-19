@@ -38,11 +38,10 @@ def test_nsfw():
                 # Take care of the offset
                 if 'offset' in data: 
                     results = runNsfwClassifier(file_path, offset=data['offset'])
+                    return jsonify(next(iter(results.values())) if results else {})
                 else:
                     results = runNsfwClassifier(file_path)
-            
-            # Return the JSON results
-            return jsonify({'results': results})
+                    return jsonify({'results': results})
         else:
             return jsonify({'error': 'Invalid JSON input. Missing "file_path" field.'}), 400
     except Exception as e:
@@ -72,11 +71,10 @@ def test_antivirus():
                 # Take care of the offset
                 if 'offset' in data: 
                     results = runAntivirus(file_path, offset=data['offset'])
+                    return jsonify(next(iter(results.values())) if results else {})
                 else:
                     results = runAntivirus(file_path)
-            
-            # Return the JSON results
-            return jsonify({'results': results})
+                    return jsonify({'results': results})
         else:
             return jsonify({'error': 'Invalid JSON input. Missing "file_path" field.'}), 400
     except Exception as e:
@@ -107,11 +105,11 @@ def test_all():
                 # Take care of the offset
                 if 'offset' in data:
                     results = runEverything(file_path, offset=data['offset'])
+                    return jsonify(next(iter(results.values())) if results else {})
                 else:
                     results = runEverything(file_path)
+                    return jsonify({'results': results})
             
-            # Return the JSON results
-            return jsonify({'results': results})
         else:
             return jsonify({'error': 'Invalid JSON input. Missing "file_path" field.'}), 400
     except Exception as e:

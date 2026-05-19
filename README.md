@@ -78,6 +78,14 @@ As with the command-line version above, you can scan a single WARC record by set
 
     curl -X POST -H "Content-Type: application/json" -d '{"file_path": "/my/path/my.warc.gz", "offset"=12345}' localhost:8123/test_all
 
+Here you will get a JSON object returned, instead of an array like before. Here is an example of a response from the request above.
+
+    {"av_details":null,"av_res":"OK","filename":"picture.jpg","mime":"image/jpeg","nsfw_res":"NSFW","nsfw_score":0.9612351721064546}
+
+Note that if the content you are scanning is not a picture, and the content type is not supported by ClamAV, then you will simply get the response:
+
+    {}
+
 
 ## Return values
 
