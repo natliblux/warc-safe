@@ -72,21 +72,6 @@ Here is an example request with `curl`:
 
     curl -X POST -H "Content-Type: application/json" -d '{"file_path": "/my/path/my.warc.gz"}' localhost:8123/test_all
 
-### Scanning a single record
-
-As with the command-line version above, you can scan a single WARC record by setting the `offset` parameter. An example is shown below.
-
-    curl -X POST -H "Content-Type: application/json" -d '{"file_path": "/my/path/my.warc.gz", "offset"=12345}' localhost:8123/test_all
-
-Here you will get a JSON object returned, instead of an array like before. Here is an example of a response from the request above.
-
-    {"av_details":null,"av_res":"OK","filename":"picture.jpg","mime":"image/jpeg","nsfw_res":"NSFW","nsfw_score":0.9612351721064546}
-
-Note that if the content you are scanning is not a picture, and the content type is not supported by ClamAV, then you will simply get the response:
-
-    {}
-
-
 ## Return values
 
 All endpoints return JSON. The root element is `results`, which is a list containing the WARC records together with their filter results. Each entry in the list is identified by its `WARC-Record-ID`. Here is an example:
@@ -121,6 +106,21 @@ Note that if there were any errors while processing a record, the JSON result wi
     "error": "error message"
 }
 ````
+
+## Scanning a single record
+
+As with the command-line version above, you can scan a single WARC record by setting the `offset` parameter. An example is shown below.
+
+    curl -X POST -H "Content-Type: application/json" -d '{"file_path": "/my/path/my.warc.gz", "offset"=12345}' localhost:8123/test_all
+
+Here you will get a JSON object returned, instead of an array like before. Here is an example of a response from the request above.
+
+    {"av_details":null,"av_res":"OK","filename":"picture.jpg","mime":"image/jpeg","nsfw_res":"NSFW","nsfw_score":0.9612351721064546}
+
+Note that if the content you are scanning is not a picture, and the content type is not supported by ClamAV, then you will simply get the response:
+
+    {}
+
 
 ## NSFW scoring
 
