@@ -55,8 +55,8 @@ def runEverything(input_file, offset=None):
                 mime = record.http_headers.get_header('Content-Type')
                 if mime and len(mime) > 6 and mime[0:6] == 'image/':
                     nsfw_result = handleRecordNsfw(record, net)
-                    if 'nsfw_res' in nsfw_result:
-                        result['nsfw_res'] = nsfw_result['nsfw_res']
+                    if 'is_nsfw' in nsfw_result:
+                        result['is_nsfw'] = nsfw_result['is_nsfw']
                         result['nsfw_score'] = nsfw_result['nsfw_score']
                     
                 # Virus detection
@@ -64,10 +64,10 @@ def runEverything(input_file, offset=None):
                 
                 # If there are no results, we assume that this element is OK
                 try:               
-                    result['av_res'] = av_result['av_res']
+                    result['is_virus'] = av_result['is_virus']
                     result['av_details'] = av_result['av_details']
                 except KeyError:
-                    result['av_res'] = 'OK'
+                    result['is_virus'] = False
                     result['av_details'] = 'Null'
                     
                 # Build the results

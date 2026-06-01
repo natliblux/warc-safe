@@ -40,12 +40,15 @@ def handleRecordAntivirus(record):
         # The antivirus scan
         av = clamd_client.scan(mementofname)
         for i in av:
-            res['av_res'] = av[i][0]
+            if av[i][0] == "OK":
+                res['is_virus'] = False
+            else:
+                res['is_virus'] = True
+                
             res['av_details'] = av[i][1]
             
     except Exception as inst:
         res['err'] = str(inst)
-        res['av_res'] = 'error'
         res['av_details'] = str(inst)
     finally:
         os.remove(mementofname)
@@ -104,17 +107,16 @@ def printAvResults(results):
         if 'err' in metadata:
             output_color = bcolors.FAIL
             output_text = metadata['err']
-        elif 'av_res' in metadata:
-            output_text = metadata['av_res']
-            if output_text == "OK":
+        elif 'is_virus' in metadata:
+            if metadata['is_virus'] == False:
+                output_text = "OK"
                 output_color = bcolors.OKGREEN
             else:
-                reason = metadata['av_details']
-                output_text = f"{output_text}: {reason}"
+                output_text = metadata['av_details']
                 output_color = bcolors.FAIL
         else:
-            output_color = bcolors.WARNING
             output_text = metadata['av_details']
+            output_color = bcolors.WARNING
         
         # Pretty print the results
         output = output_color + str(output_text) + bcolors.ENDC

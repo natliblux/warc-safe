@@ -51,10 +51,14 @@ def handleRecordNsfw(record, net):
             output = net.predict(mementofname)
              
             for i in output:
-                res['nsfw_res'] = output[i]['Label']
+                if output[i]['Label'] == "NSFW":
+                    res['is_nsfw']  = True
+                else:
+                    res['is_nsfw']  = False
+                    
                 res['nsfw_score'] = output[i]['Score']
             
-            if not 'nsfw_res' in res:
+            if not 'is_nsfw' in res:
                 res['err'] = 'cannot load image'
                 
     except Exception as inst:

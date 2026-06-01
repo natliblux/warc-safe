@@ -81,11 +81,11 @@ All endpoints return JSON. The root element is `results`, which is a list contai
   "results": {
     "<urn:uuid:ec2aa5f2-391e-530a-a9ed-b44f944fdcb9>": {
       "av_details": null,
-      "av_res": "OK",
+      "is_virus": false,
       "filename": "picture.jpg",
       "mime": "image/jpeg",
-      "nsfw_res": "SFW",
-      "nsfw_score": 0.35693745957662754
+      "is_nsfw": true,
+      "nsfw_score": 0.75693745957662754
     },
     ...
     }
@@ -95,8 +95,8 @@ All endpoints return JSON. The root element is `results`, which is a list contai
 The fields available for each record are the following:
   - File name: `filename`,
   - Mime type: `mime`,
-  - Antivirus: `av_details` and `av_res`,
-  - NSFW: `nsfw_res` and `nsfw_score`,
+  - Antivirus: `av_details` and `is_virus`,
+  - NSFW: `nsfw_score` and `is_nsfw`,
   - Errors: `err`.
 
 Note that if there were any errors while processing a record, the JSON result will be of the form:
@@ -115,7 +115,7 @@ As with the command-line version above, you can scan a single WARC record by set
 
 Here you will get a JSON object returned, instead of an array like before. Here is an example of a response from the request above.
 
-    {"av_details":null,"av_res":"OK","filename":"picture.jpg","mime":"image/jpeg","nsfw_res":"NSFW","nsfw_score":0.9612351721064546}
+    {"av_details":null,"is_virus":false,"filename":"picture.jpg","mime":"image/jpeg","is_nsfw":true,"nsfw_score":0.9612351721064546}
 
 Note that if the content you are scanning is not a picture, and the content type is not supported by ClamAV, then you will simply get the response:
 
@@ -124,7 +124,9 @@ Note that if the content you are scanning is not a picture, and the content type
 
 ## NSFW scoring
 
-The `nsfw_score` is a floating-point value between 0 (not NSFW at all) and 1 (certainly NSFW). On the other hand, the `nsfw_res` field returns either `NSFW` or `SFW` depending on what the AI has detected.
+The `nsfw_score` is a floating-point value between 0 (not NSFW at all) and 1 (certainly NSFW). On the other hand, the `is_nsfw` field if `true` if the classifier deemed that the resource is NSFW. 
+
+Note that there may be some false positives (some medical images might be flagged NSFW by the classifier), whereas other images that are NSFW might not be detected as such. For this reason, we encourage you to use the `nsfw_score` field, which provides a more precise measure of the images' features.
 
 
 ## Updating your antivirus database
