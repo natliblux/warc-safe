@@ -9,6 +9,7 @@ You can either run it in test mode (check an individual WARC file) or in server 
 
 The program accepts both compressed and uncompressed WARC files and the AI NSFW model is able to work with TIFF, JPEG, PNG, SVG and WEBP formats (although images with exotic dimensions/formats might not fully work).
 
+Since June 2026, `warc-safe` is compatible with the Solr field enrichment feature of the [warc-indexer](https://github.com/netarchivesuite/warc-indexer). This means that you can add virus and NSFW information to your Solr index during indexing.
 
 # Installation
 
