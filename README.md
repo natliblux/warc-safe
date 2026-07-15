@@ -59,7 +59,9 @@ If you want to scan a single record in a WARC file, starting at a specific offse
 
 You can start the application as a server like so:
 
-    python app.py --server <port>
+    python app.py --host <host> --server <port>
+
+If not specified, the `host` will be set to `0.0.0.0` by default.
 
 The application in server mode exposes the following endpoints:
 

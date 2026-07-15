@@ -28,7 +28,7 @@ if __name__ == '__main__':
     parser.add_argument("-ta", "--test-av", type=str, help="Test a WARC file for viruses. The WARC can be compressed or uncompressed.")
     parser.add_argument("-o", "--offset", type=int, help="The offest of the record in the WARC file that should be tested.")
     parser.add_argument("-v", "--version", action='version', version=f"Version: {app_version}")
-
+    parser.add_argument("-H", "--host", type=str, default="0.0.0.0", help="The host address to bind the server to (default: 0.0.0.0).")
     # Set up some logging
     logging.getLogger('werkzeug').setLevel(logging.ERROR)
 
@@ -37,8 +37,9 @@ if __name__ == '__main__':
     
     if args.server:
         server_port = args.server
-        print(f"Starting the server on port {server_port}")
-        app.run(debug=False, port=server_port, threaded=True)
+        server_host = args.host
+        print(f"Starting the server on: {server_host}:{server_port}")
+        app.run(debug=False, host=server_host, port=server_port, threaded=True)
     elif args.test_nsfw:
         if args.offset is not None:
             print(f"Starting NSFW test on file: {args.test_nsfw} at offset {args.offset}")
