@@ -37,7 +37,7 @@ def handleRecordNsfw(record, net):
         
     # Prepare the metadata
     res = {}
-    res['mime'] = record.http_headers.get_header('Content-Type')    
+    res['mime'] = record.http_headers.get_header('Content-Type')
     
     try:
         memento.write(record.content_stream().read())
@@ -88,7 +88,7 @@ def runNsfwClassifier(input_file, offset=None):
             
             stream.seek(offset)
     
-        for record in ArchiveIterator(stream):
+        for record in ArchiveIterator(stream, arc2warc=True):
             if record.rec_type == 'response' and record.http_headers:
                 mime = record.http_headers.get_header('Content-Type')
                 if mime and mime.startswith('image/'):

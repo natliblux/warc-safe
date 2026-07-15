@@ -75,7 +75,7 @@ def runAntivirus(input_file, offset=None):
             
             stream.seek(offset)
             
-        for record in ArchiveIterator(stream):
+        for record in ArchiveIterator(stream, arc2warc=True):
             if record.rec_type == 'response' and record.http_headers:
                 # Run the antivirus and build the result entity
                 result = handleRecordAntivirus(record)

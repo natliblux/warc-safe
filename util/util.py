@@ -44,7 +44,7 @@ def runEverything(input_file, offset=None):
             
             stream.seek(offset)
             
-        for record in ArchiveIterator(stream):
+        for record in ArchiveIterator(stream, arc2warc=True):
             if record.rec_type == 'response' and record.http_headers:
                 
                 # Construct the result entity
